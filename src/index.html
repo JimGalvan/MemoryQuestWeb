@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #282c34, #4a90e2);
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 5px 0;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #357ab7;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #d1d1d1;
+        }
+
+        .welcome {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #4caf50;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="logo">Online Game</div>
+
+    <div class="input-group">
+        <label for="username">Enter your name:</label>
+        <input type="text" id="username" placeholder="Your name">
+    </div>
+
+    <button class="btn" onclick="createRoom()">Create Room</button>
+    <button class="btn" onclick="joinRoomByInvite()">Join Room</button>
+
+    <div id="welcomeMessage" class="welcome" style="display: none;"></div>
+
+    <div class="footer">&copy; 2024 Online Game. All rights reserved.</div>
+</div>
+
+<script>
+    function createRoom() {
+        const username = document.getElementById('username').value;
+        console.log("Create Room clicked.", { username });
+        if (!username) {
+            alert('Please enter your name first!');
+            return;
+        }
+        alert(`${username} created a new room!`);
+        console.log(`${username} created a new room.`);
+    }
+
+    function joinRoomByInvite() {
+        const username = document.getElementById('username').value;
+        console.log("Join Room by Invite clicked.", { username });
+        if (!username) {
+            alert('Please enter your name first!');
+            return;
+        }
+
+        const roomName = prompt("Enter the room name to join:");
+        if (roomName) {
+            console.log(`${username} attempting to join ${roomName}.`);
+            simulateJoinRoom(username, roomName);
+        } else {
+            alert("Room name cannot be empty.");
+            console.log("Room name was empty.");
+        }
+    }
+
+    function simulateJoinRoom(username, roomName) {
+        console.log("Simulating room join.", { username, roomName });
+        setTimeout(() => {
+            const success = Math.random() > 0.2; // 80% chance of success
+            if (success) {
+                console.log(`${username} successfully joined ${roomName}.`);
+                displayWelcomeMessage(username, roomName);
+            } else {
+                alert("Failed to join the room. Please try again.");
+                console.log(`${username} failed to join ${roomName}.`);
+            }
+        }, 1000);
+    }
+
+    function displayWelcomeMessage(username, roomName) {
+        const welcomeMessage = document.getElementById('welcomeMessage');
+        welcomeMessage.textContent = `Welcome ${username} to ${roomName}!`;
+        welcomeMessage.style.display = "block";
+        console.log("Welcome message displayed.", { username, roomName });
+    }
+</script>
+</body>
+</html>
