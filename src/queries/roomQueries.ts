@@ -1,21 +1,39 @@
 import axiosInstance from "../services/axiosInstance.ts";
-import {Room} from "../dtos/Room.ts";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {CreateRoomDto} from "../dtos/CreateRoomDto.ts";
+import {Room} from "../types/Room.ts";
+import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
+import {CreateRoomRequestDto} from "../dtos/CreateRoomRequestDto.ts";
+import userRoomStore from "../stores/room-store.ts";
 
-
-const createRoom = async (request: CreateRoomDto): Promise<Room> => {
+const createRoom = async (request: CreateRoomRequestDto): Promise<Room> => {
     const response = await axiosInstance.post('/room/', request);
     return response.data;
 }
 
 export const useCreateRoomMutation = () => {
     const queryClient = useQueryClient();
+    const addRoom = userRoomStore((state) => state.addRoom);
 
-    return useMutation<Room, Error, CreateRoomDto>({
+    return useMutation<Room, Error, CreateRoomRequestDto>({
         mutationFn: createRoom,
-        onSuccess: () => {
-            queryClient.invalidateQueries({queryKey: ['rooms']}).then(r => console.log(r));
+        onSuccess: (data) => {
+            addRoom(data);
+            queryClient.invalidateQueries({queryKey: ['rooms']}).then(resp => {
+                console.log(resp);
+            });
         }
     });
 };
+
+const getRoom = async (roomId: string): Promise<Room> => {
+    const response = await axiosInstance.get(`/room/${roomId}`);
+    return response.data;
+}
+
+export const useGetRoomQuery = (roomId: string | undefined) => {
+    return useQuery<Room, Error>({queryKey: ['room', roomId], queryFn: () => getRoom(roomId)});
+}
+
+const joinRoom = async (roomId: string): Promise<Room> => {
+    const response = await axiosInstance.post(`/room/${roomId}/join`);
+    return response.data;
+}

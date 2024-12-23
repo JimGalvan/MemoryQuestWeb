@@ -1,10 +1,12 @@
 import {Button, Group, TextInput} from '@mantine/core';
 import {useForm} from '@mantine/form';
 import {useCreateRoomMutation} from "../queries/roomQueries.ts";
-import {CreateRoomDto} from "../dtos/CreateRoomDto.ts";
+import {CreateRoomRequestDto} from "../dtos/CreateRoomRequestDto.ts";
+import {useNavigate} from "react-router-dom";
 
 const CreateGameForm = () => {
-    const {mutate: createRoom, isPending} = useCreateRoomMutation();
+    const {mutate: createRoom, isPending, isError, isSuccess, data} = useCreateRoomMutation();
+    const navigate = useNavigate();
 
     const form = useForm({
         mode: 'uncontrolled',
@@ -20,9 +22,18 @@ const CreateGameForm = () => {
         return <div>Creating room...</div>;
     }
 
-    const handleCreateGame = (values: CreateRoomDto) => {
+    if (isError) {
+        return <div>Failed to create room</div>;
+    }
+
+    if (isSuccess) {
+        const roomId = data.id;
+        navigate(`/room/${roomId}`);
+    }
+
+    const handleCreateGame = (values: CreateRoomRequestDto) => {
         const {playerName} = values;
-        const createGameDto: CreateRoomDto = {playerName};
+        const createGameDto: CreateRoomRequestDto = {playerName};
         createRoom(createGameDto);
     }
 
