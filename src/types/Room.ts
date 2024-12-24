@@ -1,6 +1,6 @@
 export interface Room {
     id: string;
-    joinCode: string;
+    join_code: string;
     players: Player[];
     game: Game;
 }
