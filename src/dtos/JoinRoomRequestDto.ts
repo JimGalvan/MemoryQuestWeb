@@ -1,5 +1,4 @@
 export interface JoinRoomRequestDto {
-    playerName: string;
+    playerName: string | undefined;
     joinCode: string;
-    roomId: string
 }
