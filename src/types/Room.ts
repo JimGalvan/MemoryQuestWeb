@@ -8,7 +8,7 @@ export interface Room {
 export interface Player {
     id: string;
     name: string;
-    score: number;
+    isOwner: boolean;
 }
 
 export interface Game {
