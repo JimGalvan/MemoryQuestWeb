@@ -12,12 +12,12 @@ const createRoom = async (request: EnterRoomDto): Promise<Room> => {
 
 export const useCreateRoomMutation = () => {
     const queryClient = useQueryClient();
-    const addRoom = userRoomStore((state) => state.addRoom);
+    const setRoom = userRoomStore((state) => state.setRoom);
 
     return useMutation<Room, Error, EnterRoomDto>({
         mutationFn: createRoom,
         onSuccess: (room) => {
-            addRoom(room);
+            setRoom(room);
             queryClient.invalidateQueries({queryKey: ['rooms']}).then(resp => {
                 console.log(resp);
             });
@@ -31,7 +31,10 @@ const getRoom = async (roomId: string | undefined): Promise<Room> => {
 }
 
 export const useGetRoomQuery = (roomId: string | undefined) => {
-    return useQuery<Room, Error>({queryKey: ['room', roomId], queryFn: () => getRoom(roomId)});
+    return useQuery<Room, Error>({
+        queryKey: ['room', roomId],
+        queryFn: () => getRoom(roomId),
+    });
 }
 
 const joinRoom = async (joinRoomRequestDto: JoinRoomRequestDto): Promise<Room> => {
@@ -41,12 +44,12 @@ const joinRoom = async (joinRoomRequestDto: JoinRoomRequestDto): Promise<Room> =
 
 export const useJoinRoomMutation = () => {
     const queryClient = useQueryClient();
-    const addRoom = userRoomStore((state) => state.addRoom);
+    const setRoom = userRoomStore((state) => state.setRoom);
 
     return useMutation<Room, Error, JoinRoomRequestDto>({
         mutationFn: joinRoom,
         onSuccess: (room) => {
-            addRoom(room);
+            setRoom(room);
             queryClient.invalidateQueries({queryKey: ['rooms']}).then(resp => {
                 console.log(resp);
             });

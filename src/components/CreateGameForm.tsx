@@ -48,8 +48,8 @@ const CreateGameForm = () => {
     const handleCreateGame = (values: EnterRoomDto) => {
         const {playerName} = values;
         const player: Player = {name: playerName, id: "", isOwner: true};
-        setPlayer(player);
         const createGameDto: EnterRoomDto = {playerName};
+        setPlayer(player);
         createRoom(createGameDto);
     };
 
@@ -61,15 +61,11 @@ const CreateGameForm = () => {
     };
 
     const handleFormSubmit = (values: EnterRoomDto, playerAction: PlayerAction) => {
-        console.log(playerAction);
         if (playerAction === PlayerAction.CREATE) {
-            console.log("Creating room");
             handleCreateGame(values);
         } else if (playerAction === PlayerAction.JOIN) {
-            console.log("Joining room");
             handleJoinRoom(values);
-        } else
-            console.log("Unknown action");
+        }
     }
 
     return (
